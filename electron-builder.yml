@@ -1,0 +1,74 @@
+# electron-builder.yml
+
+appId: com.jotara.app
+productName: jotara
+
+# Resource directories
+directories:
+  buildResources: build
+  output: dist
+
+# Files to include/exclude
+files:
+  - '!**/.vscode/*'
+  - '!src/*'
+  - '!electron.vite.config.{js,ts,mjs,cjs}'
+  - '!{.eslintignore,.eslintrc.cjs,.prettierignore,.prettierrc.yaml,dev-app-update.yml,CHANGELOG.md,README.md}'
+  - '!{.env,.env.*,.npmrc,pnpm-lock.yaml}'
+  - '!{tsconfig.json,tsconfig.node.json,tsconfig.web.json}'
+asarUnpack:
+  - resources/**
+
+# Windows build configuration
+win:
+  executableName: jotara
+  sign: false                 # Disable signing globally
+  certificateFile: null
+  certificatePassword: null
+  signAndEditExecutable: false
+  signingHashAlgorithms: []
+  target:
+    - nsis                    # use NSIS installer
+
+# NSIS installer options
+nsis:
+  artifactName: ${name}-${version}-setup.${ext}
+  shortcutName: ${productName}
+  uninstallDisplayName: ${productName}
+  createDesktopShortcut: always
+  oneClick: false              # allow user to choose install location
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+
+# macOS build configuration
+mac:
+  entitlementsInherit: build/entitlements.mac.plist
+  extendInfo:
+    NSCameraUsageDescription: Application requests access to the device's camera.
+    NSMicrophoneUsageDescription: Application requests access to the device's microphone.
+    NSDocumentsFolderUsageDescription: Application requests access to the user's Documents folder.
+    NSDownloadsFolderUsageDescription: Application requests access to the user's Downloads folder.
+  notarize: false
+
+dmg:
+  artifactName: ${name}-${version}.${ext}
+
+# Linux build configuration
+linux:
+  target:
+    - AppImage
+    - snap
+    - deb
+  maintainer: electronjs.org
+  category: Utility
+
+appImage:
+  artifactName: ${name}-${version}.${ext}
+
+# Disable npm rebuild to speed up build
+npmRebuild: false
+
+# Optional publishing configuration
+publish:
+  provider: generic
+  url: https://github.com/cyberkutti-iedc/jotara
